@@ -6,7 +6,7 @@ import re
 # Prevent spurious errors during `python setup.py test`, a la
 # http://www.eby-sarna.com/pipermail/peak/2010-May/003357.html:
 try:
-    import multiprocessing
+    pass
 except ImportError:
     pass
 
@@ -23,7 +23,8 @@ def find_version(*file_paths):
                               version_file, re.M)
     if version_match:
         return version_match.group(1)
-    raise RuntimeError("Unable to find version string.")
+    raise RuntimeError('Unable to find version string.')
+
 
 def find_install_requires():
     return [x.strip() for x in
@@ -36,8 +37,8 @@ setup(
     version=find_version('mincss/__init__.py'),
     description='clears the junk out of your CSS',
     long_description=read('README.md') + '\n\n' +
-                     '\n'.join(read('docs', 'changelog.rst')
-                                   .splitlines()[1:]),
+    '\n'.join(read('docs', 'changelog.rst')
+              .splitlines()[1:]),
     author='Peter Bengtsson',
     author_email='mail@peterbe.com',
     license='BSD',

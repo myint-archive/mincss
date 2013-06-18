@@ -11,7 +11,7 @@ from lxml.cssselect import CSSSelector, SelectorSyntaxError, ExpressionError
 import urllib
 
 
-RE_FIND_MEDIA = re.compile("(@media.+?)(\{)", re.DOTALL | re.MULTILINE)
+RE_FIND_MEDIA = re.compile('(@media.+?)(\{)', re.DOTALL | re.MULTILINE)
 RE_NESTS = re.compile('@(-|keyframes).*?({)', re.DOTALL | re.M)
 RE_CLASS_DEF = re.compile('\.([\w-]+)')
 RE_ID_DEF = re.compile('#([\w-]+)')
@@ -29,13 +29,13 @@ DOWNLOAD_JS = os.path.join(
 
 
 class ParserError(Exception):
-    """happens when we fail to parse the HTML"""
-    pass
+
+    """happens when we fail to parse the HTML."""
 
 
 class DownloadError(Exception):
-    """happens when we fail to down the URL"""
-    pass
+
+    """happens when we fail to down the URL."""
 
 
 def _get_random_string():
@@ -109,7 +109,7 @@ class Processor(object):
         out, err = process.communicate()
         t1 = time.time()
         if self.debug:
-            print "Took", t1 - t0, "seconds to download with PhantomJS"
+            print 'Took', t1 - t0, 'seconds to download with PhantomJS'
 
         return unicode(out, 'utf-8')
 
@@ -137,7 +137,7 @@ class Processor(object):
                 self.links.append(
                     LinkResult(
                         href,
-                        #url,
+                        # url,
                         content,
                         processed
                     )
@@ -157,7 +157,7 @@ class Processor(object):
 
         if page is None:
             print repr(html)
-            raise ParserError("Could not parse the html")
+            raise ParserError('Could not parse the html')
 
         lines = html.splitlines()
         body, = CSSSelector('body')(page)
@@ -206,6 +206,7 @@ class Processor(object):
         Then rewrite this to become:
 
             background: url(http://cdn.example.org/foo.png)
+
         """
         css_url_regex = re.compile('url\(([^\)]+)\)')
 
@@ -223,7 +224,7 @@ class Processor(object):
                 # this is a known IE hack in CSS
                 return bail
 
-            #if not filename.startswith('/'):
+            # if not filename.startswith('/'):
             #    joined = os.path.join(
             #        os.path.dirname(href),
             #        filename
@@ -265,7 +266,7 @@ class Processor(object):
             elif nearest_close > -1 and nearest_open > -1:
                 outside = nearest_close > nearest_open
             else:
-                raise Exception("can this happen?!")
+                raise Exception('can this happen?!')
 
             if outside:
                 temp_key = '@%scomment{}' % _get_random_string()
@@ -391,12 +392,12 @@ class Processor(object):
         # we are starting the character after the first opening brace
         open_braces = 1
         position = match.end()
-        content = ""
+        content = ''
         while open_braces > 0:
             c = original_content[position]
-            if c == "{":
+            if c == '{':
                 open_braces += 1
-            if c == "}":
+            if c == '}':
                 open_braces -= 1
             content += c
             position += 1
@@ -422,7 +423,7 @@ class Processor(object):
                     # don't bother then
                     return False
 
-        #print "SELECTOR", repr(selector)
+        # print "SELECTOR", repr(selector)
         r = self._selector_query_found(bodies, selector)
         return r
 
@@ -438,10 +439,10 @@ class Processor(object):
                 for each in CSSSelector(selector)(body):
                     return True
             except SelectorSyntaxError:
-                print >>sys.stderr, "TROUBLEMAKER"
+                print >>sys.stderr, 'TROUBLEMAKER'
                 print >>sys.stderr, repr(selector)
             except ExpressionError:
-                print >>sys.stderr, "EXPRESSIONERROR"
+                print >>sys.stderr, 'EXPRESSIONERROR'
                 print >>sys.stderr, repr(selector)
         return False
 
@@ -451,6 +452,7 @@ class Processor(object):
 
 
 class _Result(object):
+
     def __init__(self, before, after):
         self.before = before
         self.after = after

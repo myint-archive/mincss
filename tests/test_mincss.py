@@ -110,7 +110,7 @@ class TestMinCSS(unittest.TestCase):
 
         ok_('@-webkit-keyframes progress-bar-stripes' in after)
         ok_('from {' in after)
-        #print after
+        # print after
 
         # some day perhaps this can be untangled and parsed too
         ok_('@import url(other.css)' in after)
@@ -123,7 +123,7 @@ class TestMinCSS(unittest.TestCase):
 
         link = p.links[0]
         after = link.after
-        #print repr(after)
+        # print repr(after)
         ok_('/* A comment */' in after, after)
         ok_('@media (max-width: 900px) {' in after, after)
         ok_('.container .two {' in after, after)
