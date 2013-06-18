@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+
+from __future__ import print_function
 import codecs
 import datetime
 import os
@@ -64,7 +66,7 @@ def proxy(path):
     t0 = time.time()
     html = download(url)
     t1 = time.time()
-    print '%.4f seconds to download' % (t1 - t0)
+    print('%.4f seconds to download' % (t1 - t0))
 
     p = Processor(debug=False, optimize_lookup=True)
     # since we've already download the HTML
@@ -73,7 +75,7 @@ def proxy(path):
     t1 = time.time()
     p.process()
     t2 = time.time()
-    print '%.4f seconds to parse and process' % (t2 - t1)
+    print('%.4f seconds to parse and process' % (t2 - t1))
 
     collect_stats = request.args.get('MINCSS_STATS', False)
     stats = []

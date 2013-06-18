@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 import sys
 import functools
@@ -109,7 +110,7 @@ class Processor(object):
         out, err = process.communicate()
         t1 = time.time()
         if self.debug:
-            print 'Took', t1 - t0, 'seconds to download with PhantomJS'
+            print('Took', t1 - t0, 'seconds to download with PhantomJS')
 
         return unicode(out, 'utf-8')
 
@@ -156,7 +157,7 @@ class Processor(object):
         page = tree.getroot()
 
         if page is None:
-            print repr(html)
+            print(repr(html))
             raise ParserError('Could not parse the html')
 
         lines = html.splitlines()
@@ -439,11 +440,11 @@ class Processor(object):
                 for each in CSSSelector(selector)(body):
                     return True
             except SelectorSyntaxError:
-                print >>sys.stderr, 'TROUBLEMAKER'
-                print >>sys.stderr, repr(selector)
+                print('TROUBLEMAKER', file=sys.stderr)
+                print(repr(selector), file=sys.stderr)
             except ExpressionError:
-                print >>sys.stderr, 'EXPRESSIONERROR'
-                print >>sys.stderr, repr(selector)
+                print('EXPRESSIONERROR', file=sys.stderr)
+                print(repr(selector), file=sys.stderr)
         return False
 
     @staticmethod
