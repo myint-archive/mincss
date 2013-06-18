@@ -39,9 +39,7 @@ setup(
     name='mincss',
     version=find_version('mincss/__init__.py'),
     description='clears the junk out of your CSS',
-    long_description=read('README.md') + '\n\n' +
-    '\n'.join(read('docs', 'changelog.rst')
-              .splitlines()[1:]),
+    long_description=read('README.rst'),
     author='Peter Bengtsson',
     author_email='mail@peterbe.com',
     license='BSD',
