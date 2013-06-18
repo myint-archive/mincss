@@ -35,10 +35,6 @@ def run(args):
         os.mkdir(output_dir)
     for link in p.links:
         print('FOR', link.href)
-        # print "BEFORE ".ljust(79, '-')
-        # print link.before
-        # print "AFTER ".ljust(79, '-')
-        # print link.after
         orig_name = link.href.split('/')[-1]
         with open(os.path.join(output_dir, orig_name), 'w') as f:
             f.write(link.after)

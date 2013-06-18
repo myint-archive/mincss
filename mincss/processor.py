@@ -124,7 +124,6 @@ class Processor(object):
 
             if isinstance(identifier[0], int):
                 line, url = identifier
-                # inline
                 self.inlines.append(
                     InlineResult(
                         line,
@@ -138,7 +137,6 @@ class Processor(object):
                 self.links.append(
                     LinkResult(
                         href,
-                        # url,
                         content,
                         processed
                     )
@@ -225,12 +223,6 @@ class Processor(object):
                 # this is a known IE hack in CSS
                 return bail
 
-            # if not filename.startswith('/'):
-            #    joined = os.path.join(
-            #        os.path.dirname(href),
-            #        filename
-            #    )
-
             new_filename = urlparse.urljoin(href, filename)
             return 'url("%s")' % new_filename
 
@@ -314,7 +306,6 @@ class Processor(object):
             else:
                 improved = ''
             temp_key = '@%s{}' % _get_random_string()
-            #content = content.replace(whole, temp_key)
             inner_improvements.append(
                 (temp_key, whole, improved)
             )
@@ -424,7 +415,6 @@ class Processor(object):
                     # don't bother then
                     return False
 
-        # print "SELECTOR", repr(selector)
         r = self._selector_query_found(bodies, selector)
         return r
 
@@ -471,5 +461,4 @@ class LinkResult(_Result):
 
     def __init__(self, href, *args):
         self.href = href
-        #self.url = url
         super(LinkResult, self).__init__(*args)

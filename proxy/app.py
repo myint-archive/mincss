@@ -96,14 +96,6 @@ def proxy(path):
             # this is a known IE hack in CSS
             return bail
 
-        # if not filename.startswith('/'):
-        #    filename = os.path.normpath(
-        #        os.path.join(
-        #            os.path.dirname(href),
-        #            filename
-        #        )
-        #    )
-
         new_filename = urlparse.urljoin(url, filename)
         return 'url("%s")' % new_filename
 
@@ -127,11 +119,9 @@ def proxy(path):
     # lxml inserts a doctype if none exists, so only include it in
     # the root if it was in the original html.
     was_doctype = tree.docinfo.doctype
-    #root = tree if stripped.startswith(tree.docinfo.doctype) else page
 
     links = dict((x.href, x) for x in p.links)
 
-    #all_lines = html.splitlines()
     for link in CSSSelector('link')(page):
         if (
             link.attrib.get('rel', '') == 'stylesheet' or
@@ -191,7 +181,6 @@ def proxy(path):
                 urlparse.urljoin(url, a.attrib['href'])
                 .replace('http://', '')
             )
-        # else:
         if collect_stats:
             a.attrib['href'] = add_collect_stats_qs(
                 a.attrib['href'],
