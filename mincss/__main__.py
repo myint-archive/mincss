@@ -7,9 +7,7 @@ import os
 import sys
 import time
 
-# make sure it's running the mincss here and not anything installed
-sys.path.insert(0, os.path.dirname(__file__))
-from mincss.processor import Processor
+from .processor import Processor
 
 
 def run(args):

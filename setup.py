@@ -62,5 +62,5 @@ setup(
     tests_require=['nose'],
     test_suite='tests',
     url='http://github.com/peterbe/mincss',
-    scripts=['mincss-run']
+    entry_points={'console_scripts': ['mincss=mincss.main:main']},
 )
