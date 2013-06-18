@@ -80,14 +80,14 @@ class Processor(object):
 
     def _download(self, url):
         try:
-            response = urlopen(url)
-            if response.getcode() is not None:
-                if response.getcode() != 200:
-                    raise DownloadError(
-                        '%s -- %s ' % (url, response.getcode())
-                    )
-            content = response.read()
-            return unicode(content, 'utf-8')
+            with urlopen(url) as response:
+                if response.getcode() is not None:
+                    if response.getcode() != 200:
+                        raise DownloadError(
+                            '%s -- %s ' % (url, response.getcode())
+                        )
+                content = response.read()
+                return unicode(content, 'utf-8')
         except IOError:
             raise IOError(url)
 
