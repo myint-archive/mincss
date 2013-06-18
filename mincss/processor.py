@@ -165,7 +165,7 @@ class Processor(object):
 
     def process_html(self, html, url):
         parser = etree.HTMLParser()
-        tree = etree.fromstring(html, parser).getroottree()
+        tree = etree.fromstring(html.encode('utf-8'), parser).getroottree()
         page = tree.getroot()
 
         if page is None:
