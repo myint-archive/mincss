@@ -1,4 +1,6 @@
-import codecs
+#!/usr/bin/env python
+
+import io
 import os
 import re
 
@@ -14,7 +16,8 @@ from setuptools import setup, find_packages
 
 
 def read(*parts):
-    return codecs.open(os.path.join(os.path.dirname(__file__), *parts)).read()
+    with io.open(os.path.join(os.path.dirname(__file__), *parts)) as f:
+        return f.read()
 
 
 def find_version(*file_paths):
@@ -58,5 +61,6 @@ setup(
     install_requires=find_install_requires(),
     tests_require=['nose'],
     test_suite='tests',
-    url='http://github.com/peterbe/mincss'
+    url='http://github.com/peterbe/mincss',
+    scripts=['mincss-run']
 )

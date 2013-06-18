@@ -54,7 +54,7 @@ def run(args):
     return 0
 
 
-if __name__ == '__main__':
+def main():
     import argparse
     parser = argparse.ArgumentParser()
     add = parser.add_argument
@@ -72,4 +72,8 @@ if __name__ == '__main__':
         help='Where is the phantomjs executable')
 
     args = parser.parse_args()
-    sys.exit(run(args))
+    return run(args)
+
+
+if __name__ == '__main__':
+    sys.exit(main())
