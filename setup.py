@@ -59,8 +59,7 @@ setup(
         'Programming Language :: Python :: 2.7',
     ],
     install_requires=find_install_requires(),
-    tests_require=['nose'],
-    test_suite='tests',
+    test_suite='tests.test_mincss',
     url='http://github.com/peterbe/mincss',
     entry_points={'console_scripts': ['mincss=mincss.main:main']},
 )

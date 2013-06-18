@@ -8,4 +8,4 @@ install:
     - python setup.py --quiet install
 
 script:
-    - nosetests
+    - python setup.py --quiet test
