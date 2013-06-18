@@ -19,7 +19,7 @@ Example
 
 
 Installation
-============
+------------
 
 From pip::
 
