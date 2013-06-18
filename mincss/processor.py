@@ -1,11 +1,14 @@
 from __future__ import print_function
+
+import contextlib
+import functools
 import os
 import sys
-import functools
 import random
 import re
 import time
 import subprocess
+
 from lxml import etree
 from lxml.cssselect import CSSSelector, SelectorSyntaxError, ExpressionError
 
@@ -80,7 +83,7 @@ class Processor(object):
 
     def _download(self, url):
         try:
-            with urlopen(url) as response:
+            with contextlib.closing(urlopen(url)) as response:
                 if response.getcode() is not None:
                     if response.getcode() != 200:
                         raise DownloadError(
