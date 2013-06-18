@@ -200,6 +200,7 @@ class TestMinCSS(unittest.TestCase):
         url = 'file://' + HERE + '/west.png'
         ok_('url("%s")' % url in after)
 
+    @unittest.skip
     def test_download_with_phantomjs(self):
         html = os.path.join(HERE, 'one.html')
         url = 'file://' + html
