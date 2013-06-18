@@ -8,6 +8,12 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 from mincss.processor import Processor
 
 
+try:
+    unicode
+except NameError:
+    unicode = str
+
+
 HERE = os.path.dirname(__file__)
 
 PHANTOMJS = os.path.join(HERE, 'fake_phantomjs')

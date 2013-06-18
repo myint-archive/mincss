@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 from __future__ import print_function
+
+import io
 import os
 import sys
 import time
@@ -36,11 +38,11 @@ def run(args):
     for link in p.links:
         print('FOR', link.href)
         orig_name = link.href.split('/')[-1]
-        with open(os.path.join(output_dir, orig_name), 'w') as f:
+        with io.open(os.path.join(output_dir, orig_name), 'w') as f:
             f.write(link.after)
         before_name = 'before_' + link.href.split('/')[-1]
-        with open(os.path.join(output_dir, before_name), 'w') as f:
-            f.write(link.before.encode('utf-8'))
+        with io.open(os.path.join(output_dir, before_name), 'w') as f:
+            f.write(link.before)
         print('Files written to', output_dir)
         print()
         print(

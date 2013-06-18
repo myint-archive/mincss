@@ -8,10 +8,15 @@ import functools
 import logging
 import hashlib
 import re
-import urllib
-import urlparse
 import shutil
 import time
+
+try:
+    from urllib.parse import urljoin, urlparse
+    from urllib.request import urlopen
+except ImportError:
+    from urlparse import urljoin, urlparse
+    from urllib import urlopen
 
 from lxml import etree
 from lxml.cssselect import CSSSelector
@@ -23,6 +28,12 @@ import sys
 # do this to help development
 sys.path.insert(0, os.path.normpath('../'))
 from mincss.processor import Processor
+
+
+try:
+    unicode
+except NameError:
+    unicode = str
 
 
 CACHE_DIR = os.path.join(
@@ -47,7 +58,7 @@ def cache(path):
 
 
 def download(url):
-    html = urllib.urlopen(url).read()
+    html = urlopen(url).read()
     return unicode(html, 'utf-8')
 
 
@@ -59,7 +70,7 @@ def proxy(path):
     if not path.count('://'):
         url = 'http://' + url
 
-    query = urlparse.urlparse(request.url).query
+    query = urlparse(request.url).query
     if query:
         url += '?%s' % query
     logging.info('Downloading %s' % url)
@@ -96,7 +107,7 @@ def proxy(path):
             # this is a known IE hack in CSS
             return bail
 
-        new_filename = urlparse.urljoin(url, filename)
+        new_filename = urljoin(url, filename)
         return 'url("%s")' % new_filename
 
     for i, each in enumerate(p.inlines):
@@ -160,7 +171,7 @@ def proxy(path):
 
     for img in CSSSelector('img, script')(page):
         if 'src' in img.attrib:
-            orig_src = urlparse.urljoin(url, img.attrib['src'])
+            orig_src = urljoin(url, img.attrib['src'])
             img.attrib['src'] = orig_src
 
     for a in CSSSelector('a')(page):
@@ -178,7 +189,7 @@ def proxy(path):
         if href.startswith('/'):
             a.attrib['href'] = (
                 '/' +
-                urlparse.urljoin(url, a.attrib['href'])
+                urljoin(url, a.attrib['href'])
                 .replace('http://', '')
             )
         if collect_stats:

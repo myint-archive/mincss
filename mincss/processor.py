@@ -4,12 +4,23 @@ import sys
 import functools
 import random
 import re
-import urlparse
 import time
 import subprocess
 from lxml import etree
 from lxml.cssselect import CSSSelector, SelectorSyntaxError, ExpressionError
-import urllib
+
+try:
+    from urllib.parse import urljoin
+    from urllib.request import urlopen
+except ImportError:
+    from urlparse import urljoin
+    from urllib import urlopen
+
+
+try:
+    unicode
+except NameError:
+    unicode = str
 
 
 RE_FIND_MEDIA = re.compile('(@media.+?)(\{)', re.DOTALL | re.MULTILINE)
@@ -69,7 +80,7 @@ class Processor(object):
 
     def _download(self, url):
         try:
-            response = urllib.urlopen(url)
+            response = urlopen(url)
             if response.getcode() is not None:
                 if response.getcode() != 200:
                     raise DownloadError(
@@ -223,7 +234,7 @@ class Processor(object):
                 # this is a known IE hack in CSS
                 return bail
 
-            new_filename = urlparse.urljoin(href, filename)
+            new_filename = urljoin(href, filename)
             return 'url("%s")' % new_filename
 
         content = css_url_regex.sub(
@@ -439,7 +450,7 @@ class Processor(object):
 
     @staticmethod
     def make_absolute_url(url, href):
-        return urlparse.urljoin(url, href)
+        return urljoin(url, href)
 
 
 class _Result(object):
