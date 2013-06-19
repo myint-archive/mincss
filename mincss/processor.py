@@ -90,7 +90,8 @@ class Processor(object):
                             '%s -- %s ' % (url, response.getcode())
                         )
                 content = response.read()
-                return unicode(content, 'utf-8')
+                return unicode(content,
+                               get_charset(response))
         except IOError:
             raise IOError(url)
 
@@ -476,3 +477,18 @@ class LinkResult(_Result):
     def __init__(self, href, *args):
         self.href = href
         super(LinkResult, self).__init__(*args)
+
+
+def get_charset(response, default='utf-8'):
+    """Return encoding."""
+    try:
+        # Python 3.
+        return response.info().get_param('charset', default)
+    except AttributeError:
+        # Python 2.
+        content_type = response.headers['content-type']
+        split_on = 'charset='
+        if split_on in content_type:
+            return content_type.split(split_on)[-1]
+        else:
+            return default
