@@ -70,7 +70,6 @@ class Processor(object):
                  optimize_lookup=True):
         self.debug = debug
         self.preserve_remote_urls = preserve_remote_urls
-        self.tab = ' ' * 4
         self.blocks = {}
         self.inlines = []
         self.links = []
