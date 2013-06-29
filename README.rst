@@ -2,8 +2,8 @@ mincss
 ======
 
 .. image:: https://travis-ci.org/myint/mincss.png?branch=master
-   :target: https://travis-ci.org/myint/mincss
-   :alt: Build status
+    :target: https://travis-ci.org/myint/mincss
+    :alt: Build status
 
 Clears the junk out of your CSS by finding out which selectors are
 actually not used in your HTML.
