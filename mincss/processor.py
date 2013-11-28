@@ -177,9 +177,9 @@ class Processor(object):
         self._bodies.append(body)
         if self.optimize_lookup:
             for each in body.iter():
-                id = each.attrib.get('id')
-                if id:
-                    self._all_ids.add(id)
+                identifier = each.attrib.get('id')
+                if identifier:
+                    self._all_ids.add(identifier)
                 classes = each.attrib.get('class')
                 if classes:
                     for class_ in classes.split():
@@ -297,7 +297,7 @@ class Processor(object):
 
         nests = [(m.group(1), m) for m in RE_NESTS.finditer(content)]
         _nests = []
-        for start, m in nests:
+        for _, m in nests:
             __, whole = self._get_contents(m, content)
             _nests.append(whole)
         # once all nests have been spotted, temporarily replace them
@@ -441,7 +441,7 @@ class Processor(object):
 
         for body in bodies:
             try:
-                for each in CSSSelector(selector)(body):
+                for _ in CSSSelector(selector)(body):
                     return True
             except SelectorSyntaxError:
                 print('TROUBLEMAKER', file=sys.stderr)
