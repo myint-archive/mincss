@@ -118,8 +118,7 @@ class Processor(object):
 
         t0 = time.time()
         process = subprocess.Popen(
-            ' '.join(command),
-            shell=True,
+            command,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
         )
