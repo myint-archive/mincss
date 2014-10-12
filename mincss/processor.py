@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from __future__ import print_function
 
 import collections
@@ -10,15 +11,15 @@ import re
 import time
 import subprocess
 
-from lxml import etree
-from lxml.cssselect import CSSSelector, SelectorSyntaxError, ExpressionError
-
 try:
     from urllib.parse import urljoin
     from urllib.request import urlopen
 except ImportError:
     from urlparse import urljoin
     from urllib import urlopen
+
+from lxml import etree
+from lxml.cssselect import CSSSelector, SelectorSyntaxError, ExpressionError
 
 
 try:
