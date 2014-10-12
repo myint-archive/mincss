@@ -36,12 +36,10 @@ def find_install_requires():
 
 
 setup(
-    name='mincss',
+    name='mincss3k',
     version=find_version('mincss/__init__.py'),
-    description='clears the junk out of your CSS',
+    description='Clears the junk out of your CSS.',
     long_description=read('README.rst'),
-    author='Peter Bengtsson',
-    author_email='mail@peterbe.com',
     license='BSD',
     packages=find_packages(),
     include_package_data=True,
@@ -53,12 +51,14 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
     ],
     install_requires=find_install_requires(),
     entry_points={'console_scripts': ['mincss=mincss.main:main']},
     tests_require=['nose'],
     test_suite='tests.test_mincss',
-    url='http://github.com/peterbe/mincss'
+    url='http://github.com/myint/mincss'
 )
