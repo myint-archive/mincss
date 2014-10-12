@@ -17,10 +17,10 @@ except NameError:
 
 HERE = os.path.realpath(os.path.dirname(__file__))
 
-PHANTOMJS = os.path.join(HERE, 'fake_phantomjs')
+PHANTOMJS = os.path.realpath(os.path.join(HERE, 'fake_phantomjs'))
 
 
-class TestMinCSS(unittest.TestCase):
+class Tests(unittest.TestCase):
 
     def test_just_inline(self):
         html = os.path.join(HERE, 'one.html')
@@ -201,7 +201,6 @@ class TestMinCSS(unittest.TestCase):
         url = 'file://' + HERE + '/west.png'
         self.assertTrue('url("%s")' % url in after)
 
-    @unittest.skip('This has always been failing')
     def test_download_with_phantomjs(self):
         html = os.path.join(HERE, 'one.html')
         url = 'file://' + html
