@@ -30,7 +30,7 @@ Why?
 ----
 
 With the onslaught of Twitter Bootstrap upon the world it's very
-tempting to just download their whole fat 80+Kb CSS and serve it up even
+tempting to just download their whole fat CSS and serve it up even
 though you're not using half of the HTML that it styles.
 
 There's also the case of websites that have changed over time but
@@ -66,7 +66,7 @@ this for example:
 
     .logged-in-info {
         /* no mincss */
-    color: pink;
+        color: pink;
     }
 
 That tells ``mincss`` to ignore the whole block and all its selectors.
