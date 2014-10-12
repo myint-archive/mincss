@@ -27,10 +27,10 @@ except NameError:
     unicode = str
 
 
-RE_FIND_MEDIA = re.compile('(@media.+?)(\{)', re.DOTALL | re.MULTILINE)
-RE_NESTS = re.compile('@(-|keyframes).*?({)', re.DOTALL | re.M)
-RE_CLASS_DEF = re.compile('\.([\w-]+)')
-RE_ID_DEF = re.compile('#([\w-]+)')
+RE_FIND_MEDIA = re.compile(r'(@media.+?)(\{)', re.DOTALL | re.MULTILINE)
+RE_NESTS = re.compile(r'@(-|keyframes).*?({)', re.DOTALL | re.M)
+RE_CLASS_DEF = re.compile(r'\.([\w-]+)')
+RE_ID_DEF = re.compile(r'#([\w-]+)')
 
 
 EXCEPTIONAL_SELECTORS = (
@@ -123,7 +123,7 @@ class Processor(object):
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
         )
-        out, err = process.communicate()
+        out = process.communicate()[0]
         t1 = time.time()
         if self.debug:
             print('Took', t1 - t0, 'seconds to download with PhantomJS')
@@ -228,7 +228,7 @@ class Processor(object):
             background: url(http://cdn.example.org/foo.png)
 
         """
-        css_url_regex = re.compile('url\(([^\)]+)\)')
+        css_url_regex = re.compile(r'url\(([^\)]+)\)')
 
         def css_url_replacer(match, href=None):
             filename = match.groups()[0]
@@ -335,7 +335,7 @@ class Processor(object):
             assert old in content
             content = content.replace(old, temp_key)
 
-        _regex = re.compile('((.*?){(.*?)})', re.DOTALL | re.M)
+        _regex = re.compile(r'((.*?){(.*?)})', re.DOTALL | re.M)
 
         _already_found = set()
         _already_tried = set()
@@ -373,7 +373,7 @@ class Processor(object):
                     _already_tried.add(s)
                     perfect = False
                     improved = re.sub(
-                        '%s,?\s*' % re.escape(s),
+                        r'%s,?\s*' % re.escape(s),
                         '',
                         improved,
                         count=1
@@ -385,7 +385,7 @@ class Processor(object):
                 if not improved.strip():
                     return ''
                 else:
-                    improved = re.sub(',\s*$', ' ', improved)
+                    improved = re.sub(r',\s*$', ' ', improved)
                     whole = whole.replace(selectors, improved)
             return whole
 
