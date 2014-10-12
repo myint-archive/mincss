@@ -1,5 +1,6 @@
 from __future__ import print_function
 
+import collections
 import contextlib
 import functools
 import os
@@ -70,7 +71,8 @@ class Processor(object):
                  optimize_lookup=True):
         self.debug = debug
         self.preserve_remote_urls = preserve_remote_urls
-        self.blocks = {}
+        self.inline_blocks = collections.OrderedDict()
+        self.link_blocks = collections.OrderedDict()
         self.inlines = []
         self.links = []
         self._bodies = []
@@ -132,29 +134,30 @@ class Processor(object):
         for url in urls:
             self.process_url(url)
 
-        for identifier in sorted(self.blocks.keys()):
-            content = self.blocks[identifier]
+        for (identifier, content) in self.inline_blocks.items():
             processed = self._process_content(content, self._bodies)
 
-            if isinstance(identifier[0], int):
-                line, url = identifier
-                self.inlines.append(
-                    InlineResult(
-                        line,
-                        url,
-                        content,
-                        processed
-                    )
+            (line, url) = identifier
+            self.inlines.append(
+                InlineResult(
+                    line,
+                    url,
+                    content,
+                    processed
                 )
-            else:
-                url, href = identifier
-                self.links.append(
-                    LinkResult(
-                        href,
-                        content,
-                        processed
-                    )
+            )
+
+        for (identifier, content) in self.link_blocks.items():
+            processed = self._process_content(content, self._bodies)
+
+            href = identifier[1]
+            self.links.append(
+                LinkResult(
+                    href,
+                    content,
+                    processed
                 )
+            )
 
     def process_url(self, url):
         if self.phantomjs:
@@ -194,7 +197,7 @@ class Processor(object):
             for i, line in enumerate(lines):
                 if line.count(first_line):
                     key = (i + 1, url)
-                    self.blocks[key] = style.text
+                    self.inline_blocks[key] = style.text
                     break
 
         for link in CSSSelector('link')(page):
@@ -204,10 +207,10 @@ class Processor(object):
             ):
                 link_url = self.make_absolute_url(url, link.attrib['href'])
                 key = (link_url, link.attrib['href'])
-                self.blocks[key] = self._download(link_url)
+                self.link_blocks[key] = self._download(link_url)
                 if self.preserve_remote_urls:
-                    self.blocks[key] = self._rewrite_urls(
-                        self.blocks[key],
+                    self.link_blocks[key] = self._rewrite_urls(
+                        self.link_blocks[key],
                         link_url
                     )
 
