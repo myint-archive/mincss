@@ -8,7 +8,8 @@ mincss
 Clears the junk out of your CSS by finding out which selectors are
 actually not used in your HTML.
 
-By Peter Bengtsson, 2012-2013
+This is an unofficial fork (of https://pypi.python.org/pypi/mincss) that runs
+on both Python 2 and 3.
 
 Example
 -------
@@ -23,7 +24,7 @@ Installation
 
 From pip::
 
-    $ pip install --upgrade git+https://github.com/myint/mincss
+    $ pip install --upgrade mincss3k
 
 Why?
 ----
