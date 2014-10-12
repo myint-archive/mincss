@@ -37,7 +37,6 @@ with open('README.rst') as readme:
         ],
         install_requires=['lxml', 'cssselect'],
         entry_points={'console_scripts': ['mincss=mincss.main:main']},
-        tests_require=['nose'],
         test_suite='tests.test_mincss',
         url='https://github.com/myint/mincss'
     )

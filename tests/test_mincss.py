@@ -1,6 +1,7 @@
+#!/usr/bin/env python
+
 import os
 import unittest
-from nose.tools import eq_, ok_
 
 # make sure it's running the mincss here and not anything installed
 import sys
@@ -14,7 +15,7 @@ except NameError:
     unicode = str
 
 
-HERE = os.path.dirname(__file__)
+HERE = os.path.realpath(os.path.dirname(__file__))
 
 PHANTOMJS = os.path.join(HERE, 'fake_phantomjs')
 
@@ -30,8 +31,8 @@ class TestMinCSS(unittest.TestCase):
         # one.html only has 1 block on inline CSS
         inline = p.inlines[0]
         lines_after = inline.after.strip().splitlines()
-        eq_(inline.line, 7)
-        ok_(len(inline.after) < len(inline.before))
+        self.assertEqual(inline.line, 7)
+        self.assertTrue(len(inline.after) < len(inline.before))
 
         # compare line by line
         expect = '''
@@ -40,7 +41,7 @@ class TestMinCSS(unittest.TestCase):
             h2 { color:red }
         '''
         for i, line in enumerate(expect.strip().splitlines()):
-            eq_(line.strip(), lines_after[i].strip())
+            self.assertEqual(line.strip(), lines_after[i].strip())
 
     def test_just_one_link(self):
         html = os.path.join(HERE, 'two.html')
@@ -49,8 +50,8 @@ class TestMinCSS(unittest.TestCase):
         p.process(url)
         # two.html only has 1 link CSS ref
         link = p.links[0]
-        eq_(link.href, 'two.css')
-        ok_(len(link.after) < len(link.before))
+        self.assertEqual(link.href, 'two.css')
+        self.assertTrue(len(link.after) < len(link.before))
         lines_after = link.after.splitlines()
         # compare line by line
         expect = '''
@@ -60,7 +61,7 @@ class TestMinCSS(unittest.TestCase):
             h2 { color:red }
         '''
         for i, line in enumerate(expect.strip().splitlines()):
-            eq_(line.strip(), lines_after[i].strip())
+            self.assertEqual(line.strip(), lines_after[i].strip())
 
     def test_one_link_two_different_pages(self):
         html = os.path.join(HERE, 'two.html')
@@ -71,8 +72,8 @@ class TestMinCSS(unittest.TestCase):
         p.process(url1, url2)
         # two.html only has 1 link CSS ref
         link = p.links[0]
-        eq_(link.href, 'two.css')
-        ok_(len(link.after) < len(link.before))
+        self.assertEqual(link.href, 'two.css')
+        self.assertTrue(len(link.after) < len(link.before))
         lines_after = link.after.splitlines()
         # compare line by line
         expect = '''
@@ -83,7 +84,7 @@ class TestMinCSS(unittest.TestCase):
             .foobar, h2 { color:red }
         '''
         for i, line in enumerate(expect.strip().splitlines()):
-            eq_(line.strip(), lines_after[i].strip())
+            self.assertEqual(line.strip(), lines_after[i].strip())
 
     def test_pseudo_selectors_hell(self):
         html = os.path.join(HERE, 'three.html')
@@ -93,30 +94,30 @@ class TestMinCSS(unittest.TestCase):
         # two.html only has 1 link CSS ref
         link = p.links[0]
         after = link.after
-        ok_('a.three:hover' in after)
-        ok_('a.hundred:link' not in after)
+        self.assertTrue('a.three:hover' in after)
+        self.assertTrue('a.hundred:link' not in after)
 
-        ok_('.container > a.one' in after)
-        ok_('.container > a.notused' not in after)
-        ok_('input[type="button"]' not in after)
+        self.assertTrue('.container > a.one' in after)
+        self.assertTrue('.container > a.notused' not in after)
+        self.assertTrue('input[type="button"]' not in after)
 
-        ok_('input[type="search"]::-webkit-search-decoration' in after)
-        ok_('input[type="reset"]::-webkit-search-decoration' not in after)
+        self.assertTrue('input[type="search"]::-webkit-search-decoration' in after)
+        self.assertTrue('input[type="reset"]::-webkit-search-decoration' not in after)
 
-        ok_('@media (max-width: 900px)' in after)
-        ok_('.container .two' in after)
-        ok_('a.four' not in after)
+        self.assertTrue('@media (max-width: 900px)' in after)
+        self.assertTrue('.container .two' in after)
+        self.assertTrue('a.four' not in after)
 
-        ok_('::-webkit-input-placeholder' in after)
-        ok_(':-moz-placeholder {' in after)
-        ok_('div::-moz-focus-inner' in after)
-        ok_('button::-moz-focus-inner' not in after)
+        self.assertTrue('::-webkit-input-placeholder' in after)
+        self.assertTrue(':-moz-placeholder {' in after)
+        self.assertTrue('div::-moz-focus-inner' in after)
+        self.assertTrue('button::-moz-focus-inner' not in after)
 
-        ok_('@-webkit-keyframes progress-bar-stripes' in after)
-        ok_('from {' in after)
+        self.assertTrue('@-webkit-keyframes progress-bar-stripes' in after)
+        self.assertTrue('from {' in after)
 
         # some day perhaps this can be untangled and parsed too
-        ok_('@import url(other.css)' in after)
+        self.assertTrue('@import url(other.css)' in after)
 
     def test_media_query_simple(self):
         html = os.path.join(HERE, 'four.html')
@@ -126,11 +127,11 @@ class TestMinCSS(unittest.TestCase):
 
         link = p.links[0]
         after = link.after
-        ok_('/* A comment */' in after, after)
-        ok_('@media (max-width: 900px) {' in after, after)
-        ok_('.container .two {' in after, after)
-        ok_('.container .nine {' not in after, after)
-        ok_('a.four' not in after, after)
+        self.assertTrue('/* A comment */' in after, after)
+        self.assertTrue('@media (max-width: 900px) {' in after, after)
+        self.assertTrue('.container .two {' in after, after)
+        self.assertTrue('.container .nine {' not in after, after)
+        self.assertTrue('a.four' not in after, after)
 
     def test_double_classes(self):
         html = os.path.join(HERE, 'five.html')
@@ -139,11 +140,11 @@ class TestMinCSS(unittest.TestCase):
         p.process(url)
 
         after = p.links[0].after
-        eq_(after.count('{'), after.count('}'))
-        ok_('input.span6' in after)
-        ok_('.uneditable-input.span9' in after)
-        ok_('.uneditable-{' not in after)
-        ok_('.uneditable-input.span3' not in after)
+        self.assertEqual(after.count('{'), after.count('}'))
+        self.assertTrue('input.span6' in after)
+        self.assertTrue('.uneditable-input.span9' in after)
+        self.assertTrue('.uneditable-{' not in after)
+        self.assertTrue('.uneditable-input.span3' not in after)
 
     def test_complicated_keyframes(self):
         html = os.path.join(HERE, 'six.html')
@@ -152,10 +153,10 @@ class TestMinCSS(unittest.TestCase):
         p.process(url)
 
         after = p.inlines[0].after
-        eq_(after.count('{'), after.count('}'))
-        ok_('.pull-left' in after)
-        ok_('.pull-right' in after)
-        ok_('.pull-middle' not in after)
+        self.assertEqual(after.count('{'), after.count('}'))
+        self.assertTrue('.pull-left' in after)
+        self.assertTrue('.pull-right' in after)
+        self.assertTrue('.pull-middle' not in after)
 
     def test_ignore_annotations(self):
         html = os.path.join(HERE, 'seven.html')
@@ -164,16 +165,16 @@ class TestMinCSS(unittest.TestCase):
         p.process(url)
 
         after = p.inlines[0].after
-        eq_(after.count('{'), after.count('}'))
-        ok_('/* Leave this comment as is */' in after)
-        ok_('/* Lastly leave this as is */' in after)
-        ok_('/* Also stick around */' in after)
-        ok_('/* leave untouched */' in after)
-        ok_('.north' in after)
-        ok_('.south' in after)
-        ok_('.east' not in after)
-        ok_('.west' in after)
-        ok_('no mincss' not in after)
+        self.assertEqual(after.count('{'), after.count('}'))
+        self.assertTrue('/* Leave this comment as is */' in after)
+        self.assertTrue('/* Lastly leave this as is */' in after)
+        self.assertTrue('/* Also stick around */' in after)
+        self.assertTrue('/* leave untouched */' in after)
+        self.assertTrue('.north' in after)
+        self.assertTrue('.south' in after)
+        self.assertTrue('.east' not in after)
+        self.assertTrue('.west' in after)
+        self.assertTrue('no mincss' not in after)
 
     def test_non_ascii_html(self):
         html = os.path.join(HERE, 'eight.html')
@@ -182,8 +183,8 @@ class TestMinCSS(unittest.TestCase):
         p.process(url)
 
         after = p.inlines[0].after
-        ok_(isinstance(after, unicode))
-        ok_(u'Varf\xf6r st\xe5r det h\xe4r?' in after)
+        self.assertTrue(isinstance(after, unicode))
+        self.assertTrue(u'Varf\xf6r st\xe5r det h\xe4r?' in after)
 
     def test_preserve_remote_urls(self):
         html = os.path.join(HERE, 'nine.html')
@@ -192,13 +193,13 @@ class TestMinCSS(unittest.TestCase):
         p.process(url)
 
         after = p.links[0].after
-        ok_("url('http://www.google.com/north.png')" in after)
+        self.assertTrue("url('http://www.google.com/north.png')" in after)
         url = 'file://' + HERE + '/deeper/south.png'
-        ok_('url("%s")' % url in after)
+        self.assertTrue('url("%s")' % url in after)
         # since local file URLs don't have a domain, this is actually expected
-        ok_('url("file:///east.png")' in after)
+        self.assertTrue('url("file:///east.png")' in after)
         url = 'file://' + HERE + '/west.png'
-        ok_('url("%s")' % url in after)
+        self.assertTrue('url("%s")' % url in after)
 
     @unittest.skip('This has always been failing')
     def test_download_with_phantomjs(self):
@@ -213,8 +214,8 @@ class TestMinCSS(unittest.TestCase):
         # one.html only has 1 block on inline CSS
         inline = p.inlines[0]
         lines_after = inline.after.strip().splitlines()
-        eq_(inline.line, 7)
-        ok_(len(inline.after) < len(inline.before))
+        self.assertEqual(inline.line, 7)
+        self.assertTrue(len(inline.after) < len(inline.before))
 
         # compare line by line
         expect = '''
@@ -223,43 +224,47 @@ class TestMinCSS(unittest.TestCase):
             h2 { color:red }
         '''
         for i, line in enumerate(expect.strip().splitlines()):
-            eq_(line.strip(), lines_after[i].strip())
+            self.assertEqual(line.strip(), lines_after[i].strip())
 
     def test_make_absolute_url(self):
         p = Processor()
-        eq_(
+        self.assertEqual(
             p.make_absolute_url('http://www.com/', './style.css'),
             'http://www.com/style.css'
         )
-        eq_(
+        self.assertEqual(
             p.make_absolute_url('http://www.com', './style.css'),
             'http://www.com/style.css'
         )
-        eq_(
+        self.assertEqual(
             p.make_absolute_url('http://www.com', '//cdn.com/style.css'),
             'http://cdn.com/style.css'
         )
-        eq_(
+        self.assertEqual(
             p.make_absolute_url('http://www.com/', '//cdn.com/style.css'),
             'http://cdn.com/style.css'
         )
-        eq_(
+        self.assertEqual(
             p.make_absolute_url('http://www.com/', '/style.css'),
             'http://www.com/style.css'
         )
-        eq_(
+        self.assertEqual(
             p.make_absolute_url('http://www.com/elsewhere', '/style.css'),
             'http://www.com/style.css'
         )
-        eq_(
+        self.assertEqual(
             p.make_absolute_url('http://www.com/elsewhere/', '/style.css'),
             'http://www.com/style.css'
         )
-        eq_(
+        self.assertEqual(
             p.make_absolute_url('http://www.com/elsewhere/', './style.css'),
             'http://www.com/elsewhere/style.css'
         )
-        eq_(
+        self.assertEqual(
             p.make_absolute_url('http://www.com/elsewhere', './style.css'),
             'http://www.com/style.css'
         )
+
+
+if __name__ == '__main__':
+    unittest.main()

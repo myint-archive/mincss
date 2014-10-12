@@ -9,5 +9,5 @@ install:
     - python setup.py --quiet install
 
 script:
-    - nosetests
+    - ./setup.py test
     - mincss https://travis-ci.org
