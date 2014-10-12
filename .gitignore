@@ -3,7 +3,7 @@
 output/
 proxy/.cache/
 docs/_build/
-mincss.egg-info/
+mincss3k.egg-info/
 /build/
 /dist/
 simple.js
