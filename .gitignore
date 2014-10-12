@@ -1,3 +1,5 @@
+.*.swo
+.*.swp
 output/
 proxy/.cache/
 docs/_build/
