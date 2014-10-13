@@ -3,6 +3,7 @@ from __future__ import print_function
 
 import io
 import os
+import sys
 import time
 
 from .processor import Processor
@@ -18,33 +19,32 @@ def run(args):
     t0 = time.time()
     p.process(args.url)
     t1 = time.time()
-    print('TOTAL TIME ', t1 - t0)
+    print('TOTAL TIME ', t1 - t0, file=sys.stderr)
     for inline in p.inlines:
-        print('ON', inline.url)
-        print('AT line', inline.line)
-        print('BEFORE '.ljust(79, '-'))
-        print(inline.before)
-        print('AFTER '.ljust(79, '-'))
-        print(inline.after)
-        print()
+        print('ON', inline.url, file=sys.stderr)
+        print('AT line', inline.line, file=sys.stderr)
+        print('BEFORE '.ljust(79, '-'), file=sys.stderr)
+        print(inline.before, file=sys.stderr)
+        print('AFTER '.ljust(79, '-'), file=sys.stderr)
+        print(inline.after, file=sys.stderr)
+        print(file=sys.stderr)
 
-    output_dir = args.outputdir
-    if not os.path.isdir(output_dir):
-        os.mkdir(output_dir)
+    if not os.path.isdir(args.output):
+        os.mkdir(args.output)
     for link in p.links:
         print('FOR', link.href)
         orig_name = link.href.split('/')[-1]
-        with io.open(os.path.join(output_dir, orig_name), 'w') as f:
+        with io.open(os.path.join(args.output, orig_name), 'w') as f:
             f.write(link.after)
         before_name = 'before_' + link.href.split('/')[-1]
-        with io.open(os.path.join(output_dir, before_name), 'w') as f:
+        with io.open(os.path.join(args.output, before_name), 'w') as f:
             f.write(link.before)
-        print('Files written to', output_dir)
-        print()
+        print('Files written to\n', args.output, file=sys.stderr)
         print(
             '(from %d to %d saves %d)' %
             (len(link.before), len(link.after),
-             len(link.before) - len(link.after))
+             len(link.before) - len(link.after)),
+            file=sys.stderr
         )
 
     return 0
@@ -56,9 +56,8 @@ def main():
     add = parser.add_argument
     add('url', type=str,
         help='URL to process')
-    add('--outputdir', action='store',
-        default='./output',
-        help='directory where to put output (default ./output)')
+    add('-o', '--output', action='store', required=True,
+        help='directory where to put output')
     add('-v', '--verbose', action='store_true',
         help='increase output verbosity')
     add('--phantomjs', action='store_true',

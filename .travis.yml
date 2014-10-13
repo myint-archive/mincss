@@ -10,4 +10,4 @@ install:
 
 script:
     - ./setup.py test
-    - mincss https://travis-ci.org
+    - mincss --output=./output https://travis-ci.org

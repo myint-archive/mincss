@@ -14,9 +14,9 @@ on both Python 2 and 3.
 Example
 -------
 
-::
+To output to a directory called ``cleaned``::
 
-    $ mincss https://github.com
+    $ mincss --output=./cleaned https://github.com
 
 
 Installation

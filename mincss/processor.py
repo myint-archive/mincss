@@ -126,7 +126,8 @@ class Processor(object):
         out = process.communicate()[0]
         t1 = time.time()
         if self.debug:
-            print('Took', t1 - t0, 'seconds to download with PhantomJS')
+            print('Took', t1 - t0, 'seconds to download with PhantomJS',
+                  file=sys.stderr)
 
         return unicode(out, 'utf-8')
 
@@ -172,7 +173,7 @@ class Processor(object):
         page = tree.getroot()
 
         if page is None:
-            print(repr(html))
+            print(repr(html), file=sys.stderr)
             raise ParserError('Could not parse the html')
 
         lines = html.splitlines()
